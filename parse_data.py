@@ -6,5 +6,6 @@ def parse_all_datasets():
     parse_last_name_dataset()
 
 
+# TODO: Add handle to save in CSV
 if __name__ == "__main__":
     parse_all_datasets()

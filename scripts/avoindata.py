@@ -26,6 +26,9 @@ DEST_WOMENS_MIDDLE_NAMES_FILE = DEST_PATH_FROM_ROOT / "women_middle_names.csv"
 
 DEST_LAST_NAMES_FILE = DEST_PATH_FROM_ROOT / "last_names.csv"
 
+# TODO: take in save format as param
+# As default save in feather file format, not CSV
+
 
 def parse_first_name_dataset():
     for source_sheet, dest_file, name_type in [
