@@ -37,22 +37,22 @@ def parse_first_name_dataset():
         (FEMALES_FIRST_NAMES_SHEET, DEST_WOMENS_FIRST_NAMES_FILE, "first"),
         (FEMALES_MIDDLE_NAMES_SHEET, DEST_WOMENS_MIDDLE_NAMES_FILE, "middle"),
     ]:
-        first_names_sheet: pd.DataFrame = pd.read_excel(
+        first_names: pd.DataFrame = pd.read_excel(
             FIRST_NAMES_FILE,
             sheet_name=source_sheet,
         )
-        first_names_sheet.rename(
+        first_names.rename(
             columns={"Etunimi": f"{name_type} name", "Lukumäärä": "amount"},
             inplace=True,
         )
-        first_names_sheet.to_csv(dest_file, index=False)
+        first_names.to_csv(dest_file, index=False)
 
 
 def parse_last_name_dataset():
-    last_names_sheet: pd.DataFrame = pd.read_excel(
+    last_names: pd.DataFrame = pd.read_excel(
         LAST_NAMES_FILE, sheet_name=LAST_NAMES_SHEET
     )
-    last_names_sheet.rename(
+    last_names.rename(
         columns={"Sukunimi": "last name", "Yhteensä": "amount"}, inplace=True
     )
-    last_names_sheet.to_csv(DEST_LAST_NAMES_FILE, index=False)
+    last_names.to_csv(DEST_LAST_NAMES_FILE, index=False)
