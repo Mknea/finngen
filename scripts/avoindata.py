@@ -17,7 +17,7 @@ FEMALES_MIDDLE_NAMES_SHEET = "Naiset muut"
 LAST_NAMES_FILE = SOURCE_PATH_FROM_ROOT / "sukunimitilasto-2022-02-07-dvv.xlsx"
 LAST_NAMES_SHEET = "Nimet"
 
-DEST_PATH_FROM_ROOT = Path.cwd() / "data" / "avoindata"
+DEST_PATH_FROM_ROOT = Path.cwd() / "finngen" / "data"
 DEST_MENS_FIRST_NAMES_FILE = DEST_PATH_FROM_ROOT / "men_first_names.csv"
 DEST_MENS_MIDDLE_NAMES_FILE = DEST_PATH_FROM_ROOT / "men_middle_names.csv"
 
