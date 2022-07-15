@@ -45,6 +45,7 @@ def parse_first_name_dataset():
             columns={"Etunimi": f"{name_type} name", "Lukumäärä": "amount"},
             inplace=True,
         )
+        _add_weigths_column(first_names)
         first_names.to_csv(dest_file, index=False)
 
 
@@ -55,4 +56,10 @@ def parse_last_name_dataset():
     last_names.rename(
         columns={"Sukunimi": "last name", "Yhteensä": "amount"}, inplace=True
     )
+    _add_weigths_column(last_names)
     last_names.to_csv(DEST_LAST_NAMES_FILE, index=False)
+
+
+def _add_weigths_column(df: pd.DataFrame):
+    total = df["amount"].sum()
+    df["weight"] = df["amount"] / total
