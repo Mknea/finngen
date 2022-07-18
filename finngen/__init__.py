@@ -8,7 +8,7 @@ from collections import Counter
 from dataclasses import dataclass
 from enum import Enum
 from random import choices
-from typing import List, Literal
+from typing import List, Literal, Sequence, cast
 
 from . import _storage
 
@@ -53,7 +53,9 @@ def _generate(k: int = 1) -> List[Person]:
     counts = Counter(gender_choices)
 
     last_names = choices(
-        SOURCE_DATA["last_names"]["last name"], SOURCE_DATA["last_names"]["weight"], k=k
+        SOURCE_DATA["last_names"]["last name"],
+        cast(Sequence[float], SOURCE_DATA["last_names"]["weight"]),
+        k=k,
     )
     first_names = []
     middle_names = []
@@ -81,7 +83,9 @@ def _generate_names_based_on_gender(
 ) -> List[str]:
     prefix = "men" if gender == Gender.Male else "women"
     df = SOURCE_DATA[f"{prefix}_{name_type}_names"]
-    return choices(df[f"{name_type} name"], df["weight"], k=amount)
+    return choices(
+        df[f"{name_type} name"], cast(Sequence[float], df["weight"]), k=amount
+    )
 
 
 def generate_finnish_person() -> Person:
