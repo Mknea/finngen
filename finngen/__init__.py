@@ -8,7 +8,7 @@ from collections import Counter
 from dataclasses import dataclass
 from enum import Enum
 from random import choices
-from typing import List, Literal, Sequence, cast
+from typing import Iterator, List, Literal, Sequence, cast
 
 from . import _storage
 
@@ -42,7 +42,7 @@ SOURCE_DATA = {
 }
 
 
-def _generate(k: int = 1) -> List[Person]:
+def _generate(k: int = 1) -> Iterator[Person]:
 
     # It's expensive to setup choices:
     # Initialize non-gender related once, gender related twice
@@ -63,19 +63,15 @@ def _generate(k: int = 1) -> List[Person]:
         first_names.extend(_generate_names_based_on_gender(gender, amount, "first"))
         middle_names.extend(_generate_names_based_on_gender(gender, amount, "middle"))
 
-    people = []
     for gender, last_name, first_name, middle_name in zip(
         gender_choices, last_names, first_names, middle_names, strict=True
     ):
-        people.append(
-            Person(
-                gender=gender,
-                first_name=first_name,
-                middle_name=middle_name,
-                last_name=last_name,
-            )
+        yield Person(
+            gender=gender,
+            first_name=first_name,
+            middle_name=middle_name,
+            last_name=last_name,
         )
-    return people
 
 
 def _generate_names_based_on_gender(
@@ -88,13 +84,17 @@ def _generate_names_based_on_gender(
     )
 
 
-def generate_finnish_person() -> Person:
-    return _generate(k=1)[0]
-
-
-def generate_finnish_people(amount: int) -> List[Person]:
+def generate_finnish_people(amount: int) -> Iterator[Person]:
     if amount == 0:
-        return []
+        return iter(())
     elif amount < 0:
         raise ValueError("Cannot generate negative amount of people!")
     return _generate(k=amount)
+
+
+def create_finnish_person() -> Person:
+    return next(_generate(k=1))
+
+
+def create_finnish_people(amount: int) -> List[Person]:
+    return list(generate_finnish_people(amount=amount))
