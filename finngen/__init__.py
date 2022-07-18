@@ -4,12 +4,13 @@ __version__ = "0.1.0"
 Generate statistically (somewhat) accurate instances of finnish people!
 """
 
+from collections import Counter
 from dataclasses import dataclass
 from enum import Enum
 from random import choices
-from typing import List
+from typing import List, Literal
 
-from . import _storage, _utils
+from . import _storage
 
 
 class Gender(str, Enum):
@@ -43,25 +44,44 @@ SOURCE_DATA = {
 
 def _generate(k: int = 1) -> List[Person]:
 
-    # It's expensive to setup choices: Initialize them as little times as possible
+    # It's expensive to setup choices:
+    # Initialize non-gender related once, gender related twice
     gender_choices = choices(
         [Gender.Female, Gender.Male], [0.5, 0.5], k=k
     )  # TODO: add sophistication
-    persons = []
-    for gender_choice in gender_choices:
-        data = {"gender": gender_choice}
-        prefix = "men" if gender_choice == Gender.Male else "women"
-        for frame_key, data_key in (
-            ("last_names", "last name"),
-            (f"{prefix}_first_names", "first name"),
-            (f"{prefix}_middle_names", "middle name"),
-        ):
-            df = SOURCE_DATA[frame_key]
-            choice = choices(df[data_key], df["weight"])
-            data_key = data_key.replace(" ", "_")
-            data[data_key] = choice
-        persons.append(_utils.DataClassUnpack.instantiate(Person, data))
-    return persons
+    gender_choices.sort()
+    counts = Counter(gender_choices)
+
+    last_names = choices(
+        SOURCE_DATA["last_names"]["last name"], SOURCE_DATA["last_names"]["weight"], k=k
+    )
+    first_names = []
+    middle_names = []
+    for gender, amount in counts.items():
+        first_names.extend(_generate_names_based_on_gender(gender, amount, "first"))
+        middle_names.extend(_generate_names_based_on_gender(gender, amount, "middle"))
+
+    people = []
+    for gender, last_name, first_name, middle_name in zip(
+        gender_choices, last_names, first_names, middle_names, strict=True
+    ):
+        people.append(
+            Person(
+                gender=gender,
+                first_name=first_name,
+                middle_name=middle_name,
+                last_name=last_name,
+            )
+        )
+    return people
+
+
+def _generate_names_based_on_gender(
+    gender: Gender, amount: int, name_type: Literal["first"] | Literal["middle"]
+) -> List[str]:
+    prefix = "men" if gender == Gender.Male else "women"
+    df = SOURCE_DATA[f"{prefix}_{name_type}_names"]
+    return choices(df[f"{name_type} name"], df["weight"], k=amount)
 
 
 def generate_finnish_person() -> Person:
