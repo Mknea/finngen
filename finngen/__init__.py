@@ -45,20 +45,20 @@ SOURCE_DATA = {
 def _generate(k: int = 1) -> Iterator[Person]:
 
     # It's expensive to setup choices:
-    # Initialize non-gender related once, gender related twice
+    # Initialize non-gender related once, gender related once per gender
     gender_choices = choices(
         [Gender.Female, Gender.Male], [0.5, 0.5], k=k
     )  # TODO: add sophistication
     gender_choices.sort()
     counts = Counter(gender_choices)
 
-    last_names = choices(
+    last_names: List[str] = choices(
         SOURCE_DATA["last_names"]["last name"],
         cast(Sequence[float], SOURCE_DATA["last_names"]["weight"]),
         k=k,
     )
-    first_names = []
-    middle_names = []
+    first_names: List[str] = []
+    middle_names: List[str] = []
     for gender, amount in counts.items():
         first_names.extend(_generate_names_based_on_gender(gender, amount, "first"))
         middle_names.extend(_generate_names_based_on_gender(gender, amount, "middle"))
