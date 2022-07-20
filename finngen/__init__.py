@@ -18,7 +18,7 @@ class Gender(str, Enum):
     Female = "Female"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class Person:
     gender: Gender
     first_name: str
