@@ -2,9 +2,16 @@
 Name datasets are only available as xlsx files.
 Parse them to CSV for simpler & more efficient access.
 """
+from pathlib import Path
+from typing import Dict
+
 import pandas as pd
 
-from scripts.misc import DEST_PATH_FROM_ROOT, SOURCE_PATH_FROM_ROOT
+from scripts.misc import (
+    DEST_PATH_FROM_ROOT,
+    SOURCE_PATH_FROM_ROOT,
+    convert_amount_column_to_weight,
+)
 
 AVOINDATA_SOURCE_DIR = SOURCE_PATH_FROM_ROOT / "avoindata"
 FIRST_NAMES_FILE = AVOINDATA_SOURCE_DIR / "etunimitilasto-2022-02-07-dvv.xlsx"
@@ -36,29 +43,27 @@ def parse_first_name_dataset():
         (FEMALES_FIRST_NAMES_SHEET, DEST_WOMENS_FIRST_NAMES_FILE, "first"),
         (FEMALES_MIDDLE_NAMES_SHEET, DEST_WOMENS_MIDDLE_NAMES_FILE, "middle"),
     ]:
-        first_names: pd.DataFrame = pd.read_excel(
+        _parse_name_excel(
             FIRST_NAMES_FILE,
-            sheet_name=source_sheet,
+            source_sheet,
+            {"Etunimi": f"{name_type} name", "Lukumäärä": "amount"},
+            dest_file,
         )
-        first_names.rename(
-            columns={"Etunimi": f"{name_type} name", "Lukumäärä": "amount"},
-            inplace=True,
-        )
-        _add_weigths_column(first_names)
-        first_names.to_csv(dest_file, index=False)
 
 
 def parse_last_name_dataset():
-    last_names: pd.DataFrame = pd.read_excel(
-        LAST_NAMES_FILE, sheet_name=LAST_NAMES_SHEET
+    _parse_name_excel(
+        LAST_NAMES_FILE,
+        LAST_NAMES_SHEET,
+        {"Sukunimi": "last name", "Yhteensä": "amount"},
+        DEST_LAST_NAMES_FILE,
     )
-    last_names.rename(
-        columns={"Sukunimi": "last name", "Yhteensä": "amount"}, inplace=True
-    )
-    _add_weigths_column(last_names)
-    last_names.to_csv(DEST_LAST_NAMES_FILE, index=False)
 
 
-def _add_weigths_column(df: pd.DataFrame):
-    total = df["amount"].sum()
-    df["weight"] = df["amount"] / total
+def _parse_name_excel(
+    source_file: Path, sheet_name: str, rename_columns: Dict[str, str], dest_file: Path
+):
+    df: pd.DataFrame = pd.read_excel(str(source_file), sheet_name=sheet_name)
+    df = df.rename(columns=rename_columns)
+    df = convert_amount_column_to_weight(df)
+    df.to_csv(dest_file, index=False)
