@@ -24,13 +24,13 @@ FEMALES_MIDDLE_NAMES_SHEET = "Naiset muut"
 LAST_NAMES_FILE = AVOINDATA_SOURCE_DIR / "sukunimitilasto-2022-02-07-dvv.xlsx"
 LAST_NAMES_SHEET = "Nimet"
 
-DEST_MENS_FIRST_NAMES_FILE = DEST_PATH_FROM_ROOT / "men_first_names.csv"
-DEST_MENS_MIDDLE_NAMES_FILE = DEST_PATH_FROM_ROOT / "men_middle_names.csv"
+DEST_MENS_FIRST_NAMES_FILE = DEST_PATH_FROM_ROOT / "men_first_names.ftr"
+DEST_MENS_MIDDLE_NAMES_FILE = DEST_PATH_FROM_ROOT / "men_middle_names.ftr"
 
-DEST_WOMENS_FIRST_NAMES_FILE = DEST_PATH_FROM_ROOT / "women_first_names.csv"
-DEST_WOMENS_MIDDLE_NAMES_FILE = DEST_PATH_FROM_ROOT / "women_middle_names.csv"
+DEST_WOMENS_FIRST_NAMES_FILE = DEST_PATH_FROM_ROOT / "women_first_names.ftr"
+DEST_WOMENS_MIDDLE_NAMES_FILE = DEST_PATH_FROM_ROOT / "women_middle_names.ftr"
 
-DEST_LAST_NAMES_FILE = DEST_PATH_FROM_ROOT / "last_names.csv"
+DEST_LAST_NAMES_FILE = DEST_PATH_FROM_ROOT / "last_names.ftr"
 
 # TODO: take in save format as param
 # As default save in feather file format, not CSV
@@ -66,4 +66,4 @@ def _parse_name_excel(
     df: pd.DataFrame = pd.read_excel(str(source_file), sheet_name=sheet_name)
     df = df.rename(columns=rename_columns)
     df = convert_amount_column_to_weight(df)
-    df.to_csv(dest_file, index=False)
+    df.reset_index().to_feather(dest_file)

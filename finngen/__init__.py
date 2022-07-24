@@ -31,7 +31,7 @@ class Person:
 
 
 SOURCE_DATA = {
-    key: _storage.load_data_file(f"{key}.csv")
+    key: _storage.load_data_file(f"{key}.ftr")
     for key in (
         "last_names",
         "men_first_names",
