@@ -11,23 +11,34 @@ DEST_PATH = Path.cwd() / "data" / "source" / "statfin"
 
 
 def fetch_location_age_and_gender_distribution_data():
+    request_and_save_to_csv("location_age_gender_distr")
+
+
+def request_and_save_to_csv(query_and_dest_file_name: str):
     response = request_data_from_statsfinn(
-        QUERYS_PATH / "location_age_gender_distr.json"
+        QUERYS_PATH / f"{query_and_dest_file_name}.json"
     )
-    df = pd.read_csv(StringIO(response.text))
-    print(df)
-    with open(DEST_PATH / "location_age_gender_distr.csv", mode="w") as w_file:
+    with open(DEST_PATH / f"{query_and_dest_file_name}.csv", mode="w") as w_file:
         w_file.write(response.text)
 
 
 def request_data_from_statsfinn(query_file_path: Path):
-    """Note to request it in CSV"""
+    """Note to request response data in query in CSV format"""
     with open(query_file_path, mode="r") as file:
         preset = json.load(file)
         response = requests.post(url=preset["url"], json=preset["query"])
-        if code := response.status_code != 200:
+        if response.status_code != 200:
             raise Exception(
-                f"Request to {preset['url']} failed \
-                with status code: {code}, {response.reason}"
+                f"Request to {preset['url']} failed!\n"
+                f"Status code: {response.status_code}, {response.reason}\n"
+                f"Source file: {query_file_path}"
             )
         return response
+
+
+def inspect_res(res):
+    df = pd.read_csv(StringIO(res.text))
+    print(df)
+    import pdb
+
+    pdb.set_trace()
