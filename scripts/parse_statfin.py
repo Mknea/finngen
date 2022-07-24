@@ -19,7 +19,7 @@ HEADER_TRANSFORMATION_TABLE = {
     "Naiset 2020 Väestö 31.12.": "women",
 }
 
-DEST_LOC_AGE_GENDER_FILE = DEST_PATH_FROM_ROOT / "location_age_gender_distr.ftr"
+DEST_LOC_AGE_GENDER_FILE = DEST_PATH_FROM_ROOT / "location_age_gender.ftr"
 
 
 def parse_location_age_gender_dataset():
