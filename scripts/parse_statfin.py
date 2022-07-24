@@ -7,7 +7,9 @@ from scripts.misc import (
 )
 
 SOURCE_LOC_AGE_GENDER_FILE = (
-    SOURCE_PATH_FROM_ROOT / "statfin" / "location_age_gender_distr.csv"
+    SOURCE_PATH_FROM_ROOT
+    / "statfin"
+    / "11re -- Väestö iän (1-v.) ja sukupuolen mukaan alueittain, 1972-2021 - 2020.csv"
 )
 
 HEADER_TRANSFORMATION_TABLE = {

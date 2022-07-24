@@ -11,14 +11,15 @@ DEST_PATH = Path.cwd() / "data" / "source" / "statfin"
 
 
 def fetch_location_age_and_gender_distribution_data():
-    request_and_save_to_csv("location_age_gender_distr")
-
-
-def request_and_save_to_csv(query_and_dest_file_name: str):
-    response = request_data_from_statsfinn(
-        QUERYS_PATH / f"{query_and_dest_file_name}.json"
+    request_and_save_to_csv(
+        "location_age_gender_distr",
+        "11re -- Väestö iän (1-v.) ja sukupuolen mukaan alueittain, 1972-2021 - 2020",
     )
-    with open(DEST_PATH / f"{query_and_dest_file_name}.csv", mode="w") as w_file:
+
+
+def request_and_save_to_csv(query_file_name: str, dest_file_name: str):
+    response = request_data_from_statsfinn(QUERYS_PATH / f"{query_file_name}.json")
+    with open(DEST_PATH / f"{dest_file_name}.csv", mode="w") as w_file:
         w_file.write(response.text)
 
 
