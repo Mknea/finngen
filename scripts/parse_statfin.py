@@ -32,8 +32,13 @@ def parse_location_age_gender_dataset():
         )
         .rename(columns=HEADER_TRANSFORMATION_TABLE)
         .melt(id_vars=["area", "age"], var_name="gender", value_name="amount")
-        .replace({"gender": {"men": "man", "women": "woman"}})
+        .replace({"gender": {"men": "male", "women": "female"}})
     )
+    # Can drop zero weight rows
     df = df.drop(df[(df["amount"] == 0)].index)
+    # Over 100 years old are grouped as "100 -"
+    # FIXME: Generate instead number over 100 based on some weights?
+    df.loc[df["age"] == "100 -", "age"] = "100"
+    df["age"] = pd.to_numeric(df["age"])
     df = convert_amount_column_to_weight(df)
     df.reset_index().to_feather(DEST_LOC_AGE_GENDER_FILE)
