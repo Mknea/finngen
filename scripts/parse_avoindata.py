@@ -46,7 +46,7 @@ def parse_first_name_dataset():
         _parse_name_excel(
             FIRST_NAMES_FILE,
             source_sheet,
-            {"Etunimi": f"{name_type} name", "Lukumäärä": "amount"},
+            {"Etunimi": f"{name_type}_name", "Lukumäärä": "amount"},
             dest_file,
         )
 
@@ -55,7 +55,7 @@ def parse_last_name_dataset():
     _parse_name_excel(
         LAST_NAMES_FILE,
         LAST_NAMES_SHEET,
-        {"Sukunimi": "last name", "Yhteensä": "amount"},
+        {"Sukunimi": "last_name", "Yhteensä": "amount"},
         DEST_LAST_NAMES_FILE,
     )
 

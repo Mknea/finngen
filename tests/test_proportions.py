@@ -7,13 +7,13 @@ from pandas import DataFrame
 
 from finngen import Gender, Person, create_finnish_people
 
-PRESET_LAST_NAMES = {"last name": ["McLastname", "Lasterburg"], "weight": [0.2, 0.8]}
-PRESET_MENS_FIRST_NAMES = {"first name": ["Testy", "Batman"], "weight": [0.1, 0.9]}
-PRESET_MENS_MIDDLE_NAMES = {"middle name": ["Middly", "MidMid"], "weight": [0.4, 0.6]}
+PRESET_LAST_NAMES = {"last_name": ["McLastname", "Lasterburg"], "weight": [0.2, 0.8]}
+PRESET_MENS_FIRST_NAMES = {"first_name": ["Testy", "Batman"], "weight": [0.1, 0.9]}
+PRESET_MENS_MIDDLE_NAMES = {"middle_name": ["Middly", "MidMid"], "weight": [0.4, 0.6]}
 
-PRESET_WOMENS_FIRST_NAMES = {"first name": ["Päivi", "Batwoman"], "weight": [0.3, 0.7]}
+PRESET_WOMENS_FIRST_NAMES = {"first_name": ["Päivi", "Batwoman"], "weight": [0.3, 0.7]}
 PRESET_WOMENS_MIDDLE_NAMES = {
-    "middle name": ["Womiddly", "Dagger"],
+    "middle_name": ["Womiddly", "Dagger"],
     "weight": [0.55, 0.45],
 }
 
@@ -57,7 +57,7 @@ def test_gender_is_assigned_in_equal_proportion(generated_finns: List[Person]):
 def test_names_are_assigned_in_set_proportions(generated_finns: List[Person]):
     counts = Counter(generated_finns)
     count_of_specific_men_first_name = sum_counter_counts_of_values(
-        counts, "first_name", [PRESET_MENS_FIRST_NAMES["first name"][0]]  # type: ignore
+        counts, "first_name", [PRESET_MENS_FIRST_NAMES["first_name"][0]]  # type: ignore
     )
     assert count_of_specific_men_first_name == pytest.approx(
         len(generated_finns)
@@ -69,7 +69,7 @@ def test_names_are_assigned_in_set_proportions(generated_finns: List[Person]):
     count_of_specific_women_middle_name = sum_counter_counts_of_values(
         counts,
         "middle_name",
-        [PRESET_WOMENS_MIDDLE_NAMES["middle name"][1]],  # type: ignore
+        [PRESET_WOMENS_MIDDLE_NAMES["middle_name"][1]],  # type: ignore
     )
     assert count_of_specific_women_middle_name == pytest.approx(
         len(generated_finns)

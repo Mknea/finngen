@@ -53,7 +53,7 @@ def _generate(k: int = 1) -> Iterator[Person]:
     counts = Counter(gender_choices)
 
     last_names: List[str] = choices(
-        SOURCE_DATA["last_names"]["last name"],
+        SOURCE_DATA["last_names"]["last_name"],
         cast(Sequence[float], SOURCE_DATA["last_names"]["weight"]),
         k=k,
     )
@@ -80,7 +80,7 @@ def _generate_names_based_on_gender(
     prefix = "men" if gender == Gender.Male else "women"
     df = SOURCE_DATA[f"{prefix}_{name_type}_names"]
     return choices(
-        df[f"{name_type} name"], cast(Sequence[float], df["weight"]), k=amount
+        df[f"{name_type}_name"], cast(Sequence[float], df["weight"]), k=amount
     )
 
 
