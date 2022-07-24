@@ -2,22 +2,21 @@
 Name datasets are only available as xlsx files.
 Parse them to CSV for simpler & more efficient access.
 """
-from pathlib import Path
-
 import pandas as pd
 
-SOURCE_PATH_FROM_ROOT = Path.cwd() / "data" / "source" / "avoindata"
-FIRST_NAMES_FILE = SOURCE_PATH_FROM_ROOT / "etunimitilasto-2022-02-07-dvv.xlsx"
+from scripts.misc import DEST_PATH_FROM_ROOT, SOURCE_PATH_FROM_ROOT
+
+AVOINDATA_SOURCE_DIR = SOURCE_PATH_FROM_ROOT / "avoindata"
+FIRST_NAMES_FILE = AVOINDATA_SOURCE_DIR / "etunimitilasto-2022-02-07-dvv.xlsx"
 MENS_FIRST_NAMES_SHEET = "Miehet ens"
 MENS_MIDDLE_NAMES_SHEET = "Miehet muut"
 
 FEMALES_FIRST_NAMES_SHEET = "Naiset ens"
 FEMALES_MIDDLE_NAMES_SHEET = "Naiset muut"
 
-LAST_NAMES_FILE = SOURCE_PATH_FROM_ROOT / "sukunimitilasto-2022-02-07-dvv.xlsx"
+LAST_NAMES_FILE = AVOINDATA_SOURCE_DIR / "sukunimitilasto-2022-02-07-dvv.xlsx"
 LAST_NAMES_SHEET = "Nimet"
 
-DEST_PATH_FROM_ROOT = Path.cwd() / "finngen" / "data"
 DEST_MENS_FIRST_NAMES_FILE = DEST_PATH_FROM_ROOT / "men_first_names.csv"
 DEST_MENS_MIDDLE_NAMES_FILE = DEST_PATH_FROM_ROOT / "men_middle_names.csv"
 
