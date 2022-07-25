@@ -44,7 +44,7 @@ class Person:
 
 
 SOURCE_DATA = {
-    key: _storage.load_data_file(f"{key}.ftr")
+    key: _storage.read_data_file(file_name=key, file_type=_storage.DataFileType.feather)
     for key in (
         "location_age_gender",
         "last_names",
