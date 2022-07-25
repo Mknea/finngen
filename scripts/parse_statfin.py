@@ -27,9 +27,7 @@ def parse_location_age_gender_dataset():
     melt parallel gender amount columns in order to have single weights column"""
     df = pd.read_csv(SOURCE_LOC_AGE_GENDER_FILE)
     df = (
-        df.drop(
-            columns=[col for col in df if col not in HEADER_TRANSFORMATION_TABLE.keys()]
-        )
+        df.drop(columns=[col for col in df if col not in HEADER_TRANSFORMATION_TABLE.keys()])
         .rename(columns=HEADER_TRANSFORMATION_TABLE)
         .melt(id_vars=["area", "age"], var_name="gender", value_name="amount")
         .replace({"gender": {"men": "male", "women": "female"}})

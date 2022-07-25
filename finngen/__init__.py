@@ -61,9 +61,7 @@ def _generate(amount: int = 1) -> Iterator[Person]:
     # It's expensive to setup choices:
     # Generate fields per dataset as few times as possible and just pair them at the end
     residence_age_genders = _create_residence_age_gender(amount)
-    residence_age_genders = sorted(
-        residence_age_genders, key=lambda x: x[2], reverse=True
-    )
+    residence_age_genders = sorted(residence_age_genders, key=lambda x: x[2], reverse=True)
 
     counts_per_gender = Counter(x[2] for x in residence_age_genders)
     last_names, first_names, middle_names = _create_all_names(counts_per_gender)
@@ -111,9 +109,7 @@ def _create_names_based_on_gender(
 ) -> List[str]:
     prefix = "men" if Gender.from_str(gender) == Gender.Male else "women"
     df = SOURCE_DATA[f"{prefix}_{name_type}_names"]
-    return choices(
-        df[f"{name_type}_name"], cast(Sequence[float], df["weight"]), k=amount
-    )
+    return choices(df[f"{name_type}_name"], cast(Sequence[float], df["weight"]), k=amount)
 
 
 def generate_finnish_people(amount: int) -> Iterator[Person]:

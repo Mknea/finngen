@@ -39,13 +39,7 @@ def generated_finns(mocked_source_data):
 
 
 def sum_counter_counts_of_values(counter, field, accepted_values):
-    return sum(
-        [
-            count
-            for val, count in counter.items()
-            if getattr(val, field) in accepted_values
-        ]
-    )
+    return sum([count for val, count in counter.items() if getattr(val, field) in accepted_values])
 
 
 def test_gender_is_assigned_in_equal_proportion(generated_finns: List[Person]):
@@ -60,9 +54,7 @@ def test_names_are_assigned_in_set_proportions(generated_finns: List[Person]):
         counts, "first_name", [PRESET_MENS_FIRST_NAMES["first_name"][0]]  # type: ignore
     )
     assert count_of_specific_men_first_name == pytest.approx(
-        len(generated_finns)
-        * 0.5
-        * PRESET_MENS_FIRST_NAMES["weight"][0],  # type: ignore
+        len(generated_finns) * 0.5 * PRESET_MENS_FIRST_NAMES["weight"][0],  # type: ignore
         rel=1e-1,
     )
 
@@ -72,8 +64,6 @@ def test_names_are_assigned_in_set_proportions(generated_finns: List[Person]):
         [PRESET_WOMENS_MIDDLE_NAMES["middle_name"][1]],  # type: ignore
     )
     assert count_of_specific_women_middle_name == pytest.approx(
-        len(generated_finns)
-        * 0.5
-        * PRESET_WOMENS_MIDDLE_NAMES["weight"][1],  # type: ignore
+        len(generated_finns) * 0.5 * PRESET_WOMENS_MIDDLE_NAMES["weight"][1],  # type: ignore
         rel=1e-1,
     )
