@@ -83,4 +83,11 @@ def test_names_are_assigned_in_set_proportions(generated_finns: List[Person]):
     )
 
 
-# TODO: Test all assigned names conform to the gender
+def test_first_and_middle_names_are_tied_to_gender(generated_finns: List[Person]):
+    for person in generated_finns:
+        if person.gender == Gender.Male:
+            assert person.first_name in PRESET_MENS_FIRST_NAMES["first_name"]  # type: ignore
+            assert person.middle_name in PRESET_MENS_MIDDLE_NAMES["middle_name"]  # type: ignore
+        else:
+            assert person.first_name in PRESET_WOMENS_FIRST_NAMES["first_name"]  # type: ignore
+            assert person.middle_name in PRESET_WOMENS_MIDDLE_NAMES["middle_name"]  # type: ignore
