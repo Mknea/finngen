@@ -1,3 +1,4 @@
+import numpy as np
 import pytest
 
 from finngen import (
@@ -30,6 +31,8 @@ def test_fail_on_negative_people_generation():
 def assert_valid_person_with_valid_fields(person):
     assert type(person) is Person
     for field, expected_type in [
+        ("residence", str),
+        ("age", (int, np.integer)),
         ("gender", Gender),
         ("first_name", str),
         ("middle_name", str),
@@ -37,7 +40,7 @@ def assert_valid_person_with_valid_fields(person):
         ("full_name", str),
     ]:
         assert hasattr(person, field)
-        assert type(getattr(person, field)) is expected_type
+        assert isinstance(getattr(person, field), expected_type)
 
 
 def test_single_person_creation():
