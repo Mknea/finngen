@@ -4,11 +4,13 @@ __version__ = "0.1.0"
 Generate statistically (somewhat) accurate instances of finnish people!
 """
 
+import calendar
 from collections import Counter
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from datetime import date, datetime, timedelta
 from enum import Enum
-from random import choices
-from typing import Iterator, List, Literal, Sequence, Tuple, cast
+from random import choices, randint
+from typing import Iterator, List, Literal, Optional, Sequence, Tuple, cast
 
 from . import _storage
 
@@ -29,18 +31,39 @@ class Gender(str, Enum):
             raise NotImplementedError
 
 
-@dataclass(eq=True, frozen=True)
+@dataclass(eq=True)
 class Person:
+    """
+
+    `birthday` is computed property, randomly generated only once from age on access:
+    >>> person = create_finnish_person()
+    >>> person.age
+    58
+    >>> person.birthday
+    datetime.date(1964, 11, 4)
+    """
+
     residence: str
     age: int
     gender: Gender
     first_name: str
     middle_name: str
     last_name: str
+    _birthday: Optional[date] = field(init=False, repr=False, default=None)
 
     @property
     def full_name(self):
         return self.first_name + " " + self.middle_name + " " + self.last_name
+
+    @property
+    def birthday(self):
+        if self._birthday is None:
+            birth_year = (datetime.utcnow() - timedelta(weeks=52 * int(self.age))).date().year
+            days_in_that_year = 365 + calendar.isleap(birth_year)
+            self._birthday = date(birth_year, 1, 1) + timedelta(
+                days=randint(0, days_in_that_year - 1)
+            )
+        return self._birthday
 
 
 SOURCE_DATA = {
