@@ -1,3 +1,6 @@
+from datetime import datetime
+from unittest.mock import Mock, patch
+
 import numpy as np
 import pytest
 
@@ -58,3 +61,20 @@ def test_people_generation():
     people = [x for x in generate_finnish_people(amount=100)]
     assert 100 == len(people)
     assert_valid_person_with_valid_fields(people[50])
+
+
+@patch("datetime.datetime.utcnow", return_value=datetime(2022, 6, 25))
+@patch("random.randint", return_value=5)
+@pytest.mark.parametrize("age, expected_birth_year", [(1, 2021), (16, 2006), (100, 1922)])
+def test_birthday_basic_case_generation(
+    mock_utcnow: Mock, mock_randint: Mock, age: int, expected_birth_year: int
+):
+    person = Person(
+        residence="asd",
+        age=age,
+        gender=Gender.Female,
+        first_name="testy",
+        middle_name="",
+        last_name="Test",
+    )
+    assert datetime(year=expected_birth_year, month=1, day=5).date == person.birthday
