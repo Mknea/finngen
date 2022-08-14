@@ -3,6 +3,7 @@ from unittest.mock import Mock, patch
 
 import numpy as np
 import pytest
+from freezegun import freeze_time
 
 from finngen import (
     Gender,
@@ -63,18 +64,45 @@ def test_people_generation():
     assert_valid_person_with_valid_fields(people[50])
 
 
-@patch("datetime.datetime.utcnow", return_value=datetime(2022, 6, 25))
-@patch("random.randint", return_value=5)
-@pytest.mark.parametrize("age, expected_birth_year", [(1, 2021), (16, 2006), (100, 1922)])
-def test_birthday_basic_case_generation(
-    mock_utcnow: Mock, mock_randint: Mock, age: int, expected_birth_year: int
-):
-    person = Person(
-        residence="asd",
-        age=age,
-        gender=Gender.Female,
-        first_name="testy",
-        middle_name="",
-        last_name="Test",
+# --------- Test properties ----------------
+
+
+def create_person(**kwargs):
+    """Create person for tests with default fields filled"""
+    return Person(
+        **{
+            **{
+                "residence": "asd-municipality",
+                "age": 5,
+                "gender": Gender.Female,
+                "first_name": "Testy",
+                "middle_name": "asd",
+                "last_name": "LastNamy",
+            },
+            **kwargs,
+        }
     )
-    assert datetime(year=expected_birth_year, month=1, day=5).date == person.birthday
+
+
+@freeze_time(datetime(2022, 6, 25))
+@patch("finngen.randint")
+@pytest.mark.parametrize("age, expected_birth_year", [(1, 2021), (16, 2006), (100, 1922)])
+def test_birthday_basic_case_generation(mock_randint: Mock, age: int, expected_birth_year: int):
+    mocked_delta_randint = 5
+    mock_randint.return_value = mocked_delta_randint
+    person = create_person(age=age)
+    assert (
+        datetime(year=expected_birth_year, month=1, day=mocked_delta_randint + 1).date()
+        == person.birthday
+    )
+
+
+@freeze_time(datetime(2000, 1, 10))
+@patch("finngen.randint")
+def test_birthday_born_in_current_year(mock_randint: Mock):
+    """Should generate date only up to current day"""
+    mocked_delta_randint = 7
+    mock_randint.return_value = mocked_delta_randint
+    person = create_person(age=0)
+    assert datetime(year=2000, month=1, day=mocked_delta_randint + 1).date() == person.birthday
+    mock_randint.assert_called_once_with(0, 10 - 1)
