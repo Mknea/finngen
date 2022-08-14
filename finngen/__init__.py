@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
 from enum import Enum
 from random import choices, randint, randrange
-from typing import Iterator, List, Literal, Optional, Sequence, Tuple, cast
+from typing import Iterator, List, Literal, Optional, Sequence, Tuple, Union, cast
 
 from . import _storage
 
@@ -132,7 +132,10 @@ def _generate(amount: int = 1) -> Iterator[Person]:
     last_names, first_names, middle_names = _create_all_names(counts_per_gender)
 
     for (residence, age, gender), last_name, first_name, middle_name in zip(
-        residence_age_genders, last_names, first_names, middle_names, strict=True
+        residence_age_genders,
+        last_names,
+        first_names,
+        middle_names,
     ):
         yield Person(
             residence=residence,
@@ -170,7 +173,7 @@ def _create_all_names(
 
 
 def _create_names_based_on_gender(
-    gender: str, amount: int, name_type: Literal["first"] | Literal["middle"]
+    gender: str, amount: int, name_type: Union[Literal["first"], Literal["middle"]]
 ) -> List[str]:
     prefix = "men" if Gender.from_str(gender) == Gender.Male else "women"
     df = SOURCE_DATA[f"{prefix}_{name_type}_names"]
