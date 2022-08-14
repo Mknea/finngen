@@ -1,5 +1,4 @@
 import random
-from collections import Counter
 from typing import List
 
 import pytest
@@ -46,22 +45,20 @@ def generated_finns(mocked_source_data):
     return create_finnish_people(amount=10000)
 
 
-def sum_counter_counts_of_values(counter, field, accepted_values):
-    return sum([count for val, count in counter.items() if getattr(val, field) in accepted_values])
+def count_amount_with_field_value(container, field_name, accepted_value):
+    return len([item for item in container if getattr(item, field_name) == accepted_value])
 
 
 # FIXME: Refactor mocked data access
 def test_gender_is_assigned_in_set_proportions(generated_finns: List[Person]):
-    counts = Counter(generated_finns)
-    count_of_generated_men = sum_counter_counts_of_values(counts, "gender", Gender.Male)
+    count_of_generated_men = count_amount_with_field_value(generated_finns, "gender", Gender.Male)
     expected_amount_of_men = len(generated_finns) * PERCENTAGE_OF_MEN_IN_SOURCE
     assert count_of_generated_men == pytest.approx(expected_amount_of_men, rel=1e-1)
 
 
 def test_names_are_assigned_in_set_proportions(generated_finns: List[Person]):
-    counts = Counter(generated_finns)
-    count_of_specific_men_first_name = sum_counter_counts_of_values(
-        counts, "first_name", [PRESET_MENS_FIRST_NAMES["first_name"][0]]  # type: ignore
+    count_of_specific_men_first_name = count_amount_with_field_value(
+        generated_finns, "first_name", PRESET_MENS_FIRST_NAMES["first_name"][0]  # type: ignore
     )
     assert count_of_specific_men_first_name == pytest.approx(
         len(generated_finns)
@@ -70,10 +67,10 @@ def test_names_are_assigned_in_set_proportions(generated_finns: List[Person]):
         rel=1e-1,
     )
 
-    count_of_specific_women_middle_name = sum_counter_counts_of_values(
-        counts,
+    count_of_specific_women_middle_name = count_amount_with_field_value(
+        generated_finns,
         "middle_name",
-        [PRESET_WOMENS_MIDDLE_NAMES["middle_name"][1]],  # type: ignore
+        PRESET_WOMENS_MIDDLE_NAMES["middle_name"][1],  # type: ignore
     )
     assert count_of_specific_women_middle_name == pytest.approx(
         len(generated_finns)
