@@ -1,5 +1,5 @@
-from datetime import datetime
-from unittest.mock import Mock, patch
+from datetime import date, datetime
+from unittest.mock import Mock, PropertyMock, patch
 
 import numpy as np
 import pytest
@@ -106,3 +106,22 @@ def test_birthday_born_in_current_year(mock_randint: Mock):
     person = create_person(age=0)
     assert datetime(year=2000, month=1, day=mocked_delta_randint + 1).date() == person.birthday
     mock_randint.assert_called_once_with(0, 10 - 1)
+
+
+@freeze_time(datetime(2022, 6, 25))
+@patch("finngen.randrange")
+@pytest.mark.parametrize(
+    "age, gender, mock_individual_number, mock_birthday, expected_code",
+    [
+        (70, Gender.Female, 308, date(1952, 10, 13), "131052-308T"),
+        (16, Gender.Male, 5, date(2006, 2, 20), "200206A0057"),
+    ],
+)
+def test_personal_identity_code(
+    mock_randrange: Mock, age, gender, mock_individual_number, mock_birthday, expected_code
+):
+    person = create_person(gender=gender, age=age)
+    mock_randrange.return_value = mock_individual_number
+    with patch.object(Person, "birthday", new_callable=PropertyMock) as mock:
+        mock.return_value = mock_birthday
+        assert expected_code == person.personal_identity_code

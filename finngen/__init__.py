@@ -98,13 +98,11 @@ class Person:
             )
             check_modulo = int(birth_code + individual_number) % 31
             check_digit = (
-                check_modulo
+                str(check_modulo)
                 if check_modulo < 10
-                else {k: v for k, v in zip(range(10, 31), "ABCDEFHJKLMNPRSTVWXY".split())}[
-                    check_modulo
-                ]
+                else {k: v for k, v in zip(range(10, 31), [*"ABCDEFHJKLMNPRSTVWXY"])}[check_modulo]
             )
-            self.personal_identity_code = (
+            self._personal_identity_code = (
                 birth_code + century_code + individual_number + check_digit
             )
         return self._personal_identity_code
