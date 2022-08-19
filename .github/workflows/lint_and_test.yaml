@@ -1,0 +1,45 @@
+name: lint and test workflow
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: False
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install poetry
+      run: pipx install poetry
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'poetry'
+
+    - name: Install dependencies
+      run: |
+        poetry install
+
+    - name: Lint and format
+      run: |
+        poetry run isort .
+        poetry run black .
+        poetry run flake8 .
+
+    - name: typecheck
+      run: poetry run mypy .
+
+    - name: Test with pytest
+      run: |
+        poetry run pytest --cov
