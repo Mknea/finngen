@@ -60,7 +60,11 @@ class Person:
             if field_name[0] == "_":
                 showm_fields[field_name[1:]] = getattr(self, field_name)
                 del showm_fields[field_name]
-        return "Person(" + ", ".join(f"{key}={value}" for key, value in showm_fields.items()) + ")"
+        return (
+            "Person("
+            + ", ".join(f"{key}={repr(value)}" for key, value in showm_fields.items())
+            + ")"
+        )
 
     @property
     def full_name(self):

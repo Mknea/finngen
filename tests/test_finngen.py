@@ -130,7 +130,7 @@ def test_personal_identity_code(
 @pytest.mark.parametrize("computed_property", ["birthday", "personal_identity_code"])
 def test_repr_only_shows_computed_properties_once_generated(computed_property: str):
     person = create_person()
-    assert computed_property not in str(person)
+    assert computed_property not in repr(person)
     computed_value = getattr(person, computed_property)
-    assert computed_property in str(person)
-    assert str(computed_value) in str(person)
+    assert computed_property in repr(person)
+    assert repr(computed_value) in repr(person)
