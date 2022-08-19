@@ -125,3 +125,12 @@ def test_personal_identity_code(
     with patch.object(Person, "birthday", new_callable=PropertyMock) as mock:
         mock.return_value = mock_birthday
         assert expected_code == person.personal_identity_code
+
+
+@pytest.mark.parametrize("computed_property", ["birthday", "personal_identity_code"])
+def test_repr_only_shows_computed_properties_once_generated(computed_property: str):
+    person = create_person()
+    assert computed_property not in str(person)
+    computed_value = getattr(person, computed_property)
+    assert computed_property in str(person)
+    assert str(computed_value) in str(person)

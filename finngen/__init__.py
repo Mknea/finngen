@@ -53,6 +53,15 @@ class Person:
     _birthday: Optional[date] = field(init=False, repr=False, default=None)
     _personal_identity_code: Optional[str] = field(init=False, repr=False, default=None)
 
+    def __repr__(self) -> str:
+        # Show hidden fields only once they have been generated
+        showm_fields = self.__dict__
+        for field_name in list(showm_fields.keys()):
+            if field_name[0] == "_":
+                showm_fields[field_name[1:]] = getattr(self, field_name)
+                del showm_fields[field_name]
+        return "Person(" + ", ".join(f"{key}={value}" for key, value in showm_fields.items()) + ")"
+
     @property
     def full_name(self):
         return self.first_name + " " + self.middle_name + " " + self.last_name
