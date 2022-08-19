@@ -1,6 +1,11 @@
 
 # Finngen
 
+<!-- Badges -->
+![CI status](https://github.com/mknea/finngen/actions/workflows/lint_and_test.yaml/badge.svg)
+
+![Supported python versions](https://img.shields.io/badge/-Python%203.8%20%7C%203.9%20%7C%203.10-blue)
+
 Finngen is a library for generating more statistically believeable instances of finnish people's personal data.
 
 Persons are generated from datasets made publicly available by Finnish governmental agencies.
