@@ -9,7 +9,7 @@ from collections import Counter
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
 from enum import Enum
-from random import choices, randint, randrange
+from random import choices, randint, randrange, shuffle
 from typing import Iterator, List, Literal, Optional, Sequence, Tuple, Union, cast
 
 from . import _storage
@@ -208,5 +208,8 @@ def create_finnish_person() -> Person:
     return next(_generate(amount=1))
 
 
-def create_finnish_people(amount: int) -> List[Person]:
-    return list(generate_finnish_people(amount=amount))
+def create_finnish_people(amount: int, shuffled=False) -> List[Person]:
+    people = list(generate_finnish_people(amount=amount))
+    if shuffled:
+        shuffle(people)
+    return people
