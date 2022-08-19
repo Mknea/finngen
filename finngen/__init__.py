@@ -138,7 +138,10 @@ def _generate(amount: int = 1) -> Iterator[Person]:
     residence_age_genders = sorted(residence_age_genders, key=lambda x: x[2], reverse=True)
 
     counts_per_gender = Counter(x[2] for x in residence_age_genders)
-    last_names, first_names, middle_names = _create_all_names(counts_per_gender)
+    last_names, first_names, middle_names = _create_all_names(
+        amount_male=counts_per_gender[Gender.Male.lower()],
+        amount_female=counts_per_gender[Gender.Female.lower()],
+    )
 
     for (residence, age, gender), last_name, first_name, middle_name in zip(
         residence_age_genders,
@@ -166,16 +169,16 @@ def _create_residence_age_gender(amount: int) -> List[Tuple[str, int, str]]:
 
 
 def _create_all_names(
-    counts_per_gender: Counter[str],
+    amount_male: int, amount_female: int
 ) -> Tuple[List[str], List[str], List[str]]:
     last_names: List[str] = choices(
         SOURCE_DATA["last_names"]["last_name"],
         cast(Sequence[float], SOURCE_DATA["last_names"]["weight"]),
-        k=sum(counts_per_gender.values()),
+        k=amount_male + amount_female,
     )
     first_names: List[str] = []
     middle_names: List[str] = []
-    for gender, amount in counts_per_gender.items():
+    for gender, amount in [(Gender.Male, amount_male), (Gender.Female, amount_female)]:
         first_names.extend(_create_names_based_on_gender(gender, amount, "first"))
         middle_names.extend(_create_names_based_on_gender(gender, amount, "middle"))
     return last_names, first_names, middle_names
