@@ -3,7 +3,6 @@
 
 <!-- Badges -->
 ![CI status](https://github.com/mknea/finngen/actions/workflows/lint_and_test.yaml/badge.svg)
-
 ![Supported python versions](https://img.shields.io/badge/-Python%203.8%20%7C%203.9%20%7C%203.10-blue)
 
 Finngen is a library for generating more statistically believeable instances of finnish people's personal data.
@@ -56,7 +55,7 @@ Some fields are only generated when first accessed:
 Person(
     residence='Porvoo',
     age=45,
-    gender=<Gender.Female: 'Male'>,
+    gender=<Gender.Male: 'Male'>,
     first_name='Alex',
     middle_name='Tapani',
     last_name='Kupari'
@@ -72,7 +71,7 @@ datetime.date(1977, 11, 15)
 Person(
     residence='Porvoo',
     age=45,
-    gender=<Gender.Female: 'Male'>,
+    gender=<Gender.Male: 'Male'>,
     first_name='Alex',
     middle_name='Tapani',
     last_name='Kupari',
@@ -89,7 +88,7 @@ Person(
 
 The `birthday` and `personal_identity_code` properties are generated on the first access.
 `birthday` is generated backwards from the age, with random date from the birthyear. If the birthyear is the current one, the date is only generated up to current date.
-`personal_identity_code` is generated based on gender, birthday and random number (the individual number).
+`personal_identity_code` is generated based on gender, birthday and random number (for the individual number).
 
 ### Simplifications
 
