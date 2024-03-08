@@ -40,4 +40,4 @@ if __name__ == "__main__":
 
     print_with_arrow("Parsing datasets in data/source/ to finngen/data/...")
     parse_all_datasets()
-    print_with_arrow(green_text("Parsed all datasets succesfully!"))
+    print_with_arrow(green_text("Parsed all datasets successfully!"))

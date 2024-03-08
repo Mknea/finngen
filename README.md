@@ -5,7 +5,7 @@
 ![CI status](https://github.com/mknea/finngen/actions/workflows/lint_and_test.yaml/badge.svg)
 ![Supported python versions](https://img.shields.io/badge/-Python%203.8%20%7C%203.9%20%7C%203.10-blue)
 
-Finngen is a library for generating more statistically believeable instances of finnish people's personal data.
+Finngen is a library for generating more statistically believable instances of finnish people's personal data.
 
 Persons are generated from datasets made publicly available by Finnish governmental agencies.
 
@@ -94,7 +94,7 @@ $ pip install finngen
 `age`, `gender` and `residence` combinations are first generated based on the weight's in the respective dataset. Then `fist_name`, `middle_name` and `last_name` combinations are generated from name datasets based on the amount of each gender from previous step. Finally the data are combined into dataclass instances.
 
 The `birthday` and `personal_identity_code` properties are generated on the first access.
-`birthday` is generated backwards from the age, with random date from the birthyear. If the birthyear is the current one, the date is only generated up to current date.
+`birthday` is generated backwards from the age, with random date from the birth year. If the birth year is the current one, the date is only generated up to current date.
 `personal_identity_code` is generated based on gender, birthday and random number (for the individual number).
 
 ### Simplifications
@@ -117,7 +117,7 @@ The `birthday` and `personal_identity_code` properties are generated on the firs
 
 ### Development
 
-its recommended to set python version with `pyenv`.
+its recommended to use some python version manager, like `pyenv` / `asdf`.
 
 The used dependency management tool is ``poetry``.
 Refer to its instructions in installation.
