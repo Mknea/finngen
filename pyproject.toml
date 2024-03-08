@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "finngen"
-version = "0.1.0"
+version = "0.1.1a1"
 description = "Generate more statistically believable instances of finnish people's personal data"
 authors = ["Aleksi Mäkinen <aleksimatias.makinen@gmail.com>"]
 readme = "README.md"
@@ -9,7 +9,7 @@ repository = "https://github.com/Mknea/finngen"
 keywords = ["finnish", "data", "generator", "faker", "finngen"]
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.12.3"
+python = ">=3.9"
 pandas = "^2.2.0"
 pyarrow = "^15.0.1"
 

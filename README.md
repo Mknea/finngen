@@ -154,3 +154,23 @@ For all supported python versions:
 ```bash
 $ tox
 ```
+
+Manually deploying to test pypi:
+
+```bash
+# If not set, add token
+poetry config pypi-token.test-pypi <pypi-YYYYYYYY>
+# Point to test pypi
+poetry config repositories.test-pypi https://test.pypi.org/legacy/
+```
+First up the version
+```bash
+poetry version prerelease
+# or
+poetry version patch
+```
+
+```bash
+poetry build
+poetry publish -r test-pypi
+```
