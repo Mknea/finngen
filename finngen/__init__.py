@@ -8,14 +8,14 @@ import calendar
 from collections import Counter
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta, timezone
-from enum import Enum
+from enum import StrEnum
 from random import choices, randint, randrange, shuffle
 from typing import Iterator, List, Literal, Optional, Sequence, Tuple, Union, cast
 
 from . import _storage
 
 
-class Gender(str, Enum):
+class Gender(StrEnum):
     """Available genders from source data"""
 
     Male = "Male"
