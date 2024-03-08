@@ -1,9 +1,9 @@
-
 # Finngen
 
 <!-- Badges -->
+
 ![CI status](https://github.com/mknea/finngen/actions/workflows/lint_and_test.yaml/badge.svg)
-![Supported python versions](https://img.shields.io/badge/-Python%203.8%20%7C%203.9%20%7C%203.10-blue)
+![Supported python versions](https://img.shields.io/badge/-Python%203.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue)
 
 Finngen is a library for generating more statistically believable instances of finnish people's personal data.
 
@@ -23,8 +23,10 @@ Person(
     last_name='Nousiainen'
 )
 ```
+
 Generate any number of people:
-````python
+
+```python
 >>> from finngen import create_finnish_people
 >>> create_finnish_people(10000)
 [
@@ -46,8 +48,10 @@ Generate any number of people:
     ),
     ...
 ]
-````
+```
+
 Some fields are only generated when first accessed:
+
 ```python traceback
 >>> from finngen import create_finnish_person
 >>> finn = create_finnish_person()
@@ -83,6 +87,7 @@ Person(
 ## Installation
 
 To install Finngen, simply:
+
 ```bash
 $ pip install finngen
 ```
@@ -100,17 +105,20 @@ The `birthday` and `personal_identity_code` properties are generated on the firs
 ### Simplifications
 
 ### Age, location and gender datasets:
+
 - Dataset combines all over 100 years old persons to one group
 - Do not include non-binary or other genders as category
 - Age is defined as the number of whole years person has lived at the last day of the year
 
 ### Name datasets:
+
 - Do not include non-binary or other genders as category
 - Do not include first names with less than 5 holders, or last names with less than 20 holders
 - Data on the relation of first to middle name combinations does not exist in the dataset
 - Middle name counts are likely skewed as the number of middle names of individuals in Finland varies
 
 ### Data generation rules:
+
 - As it is expensive to setup `random.choice`, both gender's names are generated at once and then paired to the name + gender + location combinations
 - The point above means that the generated persons are ordered by gender. Consider generating people with `create_finnish_people(.., shuffled=True)` flag if the order needs to be random
 - Each generated person has one middle name, in reality one can have multiple or no middle names
@@ -119,23 +127,30 @@ The `birthday` and `personal_identity_code` properties are generated on the firs
 
 its recommended to use some python version manager, like `pyenv` / `asdf`.
 
-The used dependency management tool is ``poetry``.
+The used dependency management tool is `poetry`.
 Refer to its instructions in installation.
 
 Activate virtual env:
+
 ```bash
 $ poetry shell
 ```
+
 Install dependencies and git hooks:
+
 ```bash
 $ poetry install # Creates the virtual env based on pyproject.toml
 $ poetry run pre-commit install
 ```
+
 Run tests:
+
 ```bash
 $ pytest
 ```
+
 For all supported python versions:
+
 ```bash
 $ tox
 ```
