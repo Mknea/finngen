@@ -80,6 +80,13 @@ Person(
 )
 ```
 
+## Installation
+
+To install Finngen, simply:
+```bash
+$ pip install finngen
+```
+
 ## How it works
 
 ### In brief
