@@ -2,9 +2,9 @@ name: Lint and test workflow
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
@@ -13,33 +13,32 @@ jobs:
     strategy:
       fail-fast: False
       matrix:
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.9", "3.9", "3.10", "3.11", "3.12"]
 
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Install poetry
-      run: pipx install poetry
-    
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-        cache: 'poetry'
+      - uses: actions/checkout@v3
 
-    - name: Install dependencies
-      run: |
-        poetry install
+      - name: Install poetry
+        run: pipx install poetry
 
-    - name: Lint and format
-      run: |
-        poetry run isort .
-        poetry run black .
-        poetry run flake8 .
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "poetry"
 
-    - name: typecheck
-      run: poetry run mypy .
+      - name: Install dependencies
+        run: |
+          poetry install
 
-    - name: Test with pytest
-      run: |
-        poetry run pytest --cov
+      - name: Lint and format
+        run: |
+          poetry run ruff format .
+          poetry run ruff check .
+
+      - name: typecheck
+        run: poetry run mypy .
+
+      - name: Test with pytest
+        run: |
+          poetry run pytest --cov
