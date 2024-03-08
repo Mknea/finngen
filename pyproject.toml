@@ -5,11 +5,11 @@ description = ""
 authors = ["Aleksi Mäkinen <aleksimatias.makinen@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.8,<3.11"
-pandas = "^1.4.3"
-pyarrow = "^8.0.0"
+python = ">=3.9,<3.12.3"
+pandas = "^2.2.0"
+pyarrow = "^15.0.1"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "^7.1.2"
 pre-commit = "^2.20.0"
 flake8 = "^4.0.1"
@@ -18,12 +18,12 @@ black = "^22.6.0"
 pyproject-flake8 = "^0.0.1-alpha.4"
 openpyxl = "^3.0.10"
 mypy = "^0.990"
-pandas-stubs = "^1.4.3"
+pandas-stubs = "^2.2.0"
 requests = "^2.28.1"
 types-requests = "^2.28.2"
 freezegun = "^1.2.1"
 types-freezegun = "^1.1.10"
-tox = "^3.25.1"
+tox = "^4.14.1"
 importlib-resources = "^5.9.0"
 pytest-cov = "^3.0.0"
 
@@ -36,3 +36,20 @@ profile = "black"
 
 [tool.black]
 line-length = 100
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+skipsdist = true
+envlist = py3{9,10,11,12}
+
+[testenv]
+skip_install = true
+allowlist_externals = poetry
+deps =
+    pytest
+commands_pre =
+    poetry install
+commands =
+    poetry run pytest tests/ --import-mode importlib
+"""
