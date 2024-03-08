@@ -34,6 +34,7 @@ class Gender(StrEnum):
 @dataclass(eq=True)
 class Person:
     """
+    Class instance to represent a single finnish person.
 
     `birthday` and `personal_identity_code` are computed properties,
     randomly generated only once on access:
@@ -133,6 +134,17 @@ SOURCE_DATA = {
 
 
 def _generate(amount: int = 1) -> Iterator[Person]:
+    """
+    Main functionality to generate `amount` of finnish people.
+    Use the `generate_finnish_people`, `create_finnish_person` or
+    `create_finnish_people` instead of this directly.
+
+    In essence, generates combinations of residence, age and gender
+    based on source data. Then checks the amount of each gender, and
+    generates same amount of first and middle names per gender, and last names
+    per total amount, based on separate datasets.
+    Finally pairs the names together with residence, age and gender to create the people.
+    """
     # It's expensive to setup choices:
     # Generate fields per dataset as few times as possible and just pair them at the end
     residence_age_genders = _create_residence_age_gender(amount)
@@ -161,6 +173,9 @@ def _generate(amount: int = 1) -> Iterator[Person]:
 
 
 def _create_residence_age_gender(amount: int) -> List[Tuple[str, int, str]]:
+    """Create combinations of residence, age and gender
+    with weight on each combination based on source data.
+    """
     df = SOURCE_DATA["location_age_gender"]
     return choices(
         df[["area", "age", "gender"]].to_records(index=False),
@@ -172,6 +187,11 @@ def _create_residence_age_gender(amount: int) -> List[Tuple[str, int, str]]:
 def _create_all_names(
     amount_male: int, amount_female: int
 ) -> Tuple[List[str], List[str], List[str]]:
+    """Create last, first and middle names with weight based on source data
+    and given amounts of each gender.
+
+    For each type of name, return a list of names, ordered by gender.
+    """
     last_names: List[str] = choices(
         SOURCE_DATA["last_names"]["last_name"],
         cast(Sequence[float], SOURCE_DATA["last_names"]["weight"]),
@@ -194,6 +214,8 @@ def _create_names_based_on_gender(
 
 
 def generate_finnish_people(amount: int) -> Iterator[Person]:
+    """Generate iterator for `amount` of finnish people
+    represented as `Person` instances."""
     if amount == 0:
         return iter(())
     elif amount < 0:
@@ -202,10 +224,66 @@ def generate_finnish_people(amount: int) -> Iterator[Person]:
 
 
 def create_finnish_person() -> Person:
+    """Generate a single finnish person represented as `Person` instance."""
     return next(_generate(amount=1))
 
 
 def create_finnish_people(amount: int, shuffled=False) -> List[Person]:
+    """Generate list of `amount` of finnish people represented as `Person` instances.
+
+    Usage:
+    >>> from finngen import create_finnish_people
+    >>> create_finnish_people(10000)
+    [
+        Person(
+            residence='Jyväskylä',
+            age=39,
+            gender=<Gender.Male: 'Male'>,
+            first_name='Joel',
+            middle_name='Olavi',
+            last_name='Laari'
+        ),
+        Person(
+            residence='Hämeenlinna',
+            age=19,
+            gender=<Gender.Female: 'Female'>,
+            first_name='Hilkka',
+            middle_name='Kaarina',
+            last_name='Roivanen'
+        ),
+        ...
+    ]
+    # Note: Some fields are only generated when first accessed:
+    >>> from finngen import create_finnish_person
+    >>> finn = create_finnish_person()
+    >>> finn
+    Person(
+        residence='Porvoo',
+        age=45,
+        gender=<Gender.Male: 'Male'>,
+        first_name='Alex',
+        middle_name='Tapani',
+        last_name='Kupari'
+    )
+
+    >>> finn.birthday
+    datetime.date(1977, 11, 15)
+
+    >>> finn.personal_identity_code
+    '151177-223L'
+
+    >>> finn
+    Person(
+        residence='Porvoo',
+        age=45,
+        gender=<Gender.Male: 'Male'>,
+        first_name='Alex',
+        middle_name='Tapani',
+        last_name='Kupari',
+        birthday=datetime.date(1977, 11, 15),
+        personal_identity_code='151177-223L'
+    )
+    """
     people = list(generate_finnish_people(amount=amount))
     if shuffled:
         shuffle(people)
