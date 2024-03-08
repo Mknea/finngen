@@ -12,7 +12,7 @@ from enum import StrEnum
 from random import choices, randint, randrange, shuffle
 from typing import Iterator, List, Literal, Optional, Sequence, Tuple, Union, cast
 
-from . import _storage
+from . import _storage, constants
 
 
 class Gender(StrEnum):
@@ -121,15 +121,7 @@ class Person:
 
 
 SOURCE_DATA = {
-    key: _storage.load_data_file(f"{key}.ftr")
-    for key in (
-        "location_age_gender",
-        "last_names",
-        "men_first_names",
-        "men_middle_names",
-        "women_first_names",
-        "women_middle_names",
-    )
+    key: _storage.load_data_file(f"{key}.ftr") for key in constants.SOURCE_FILES_TO_COLUMNS.keys()
 }
 
 
