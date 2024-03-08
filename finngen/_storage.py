@@ -1,4 +1,4 @@
-from importlib.resources import path
+from importlib.resources import as_file, files
 
 import pandas as pd
 
@@ -6,5 +6,6 @@ from . import data
 
 
 def load_data_file(file_name: str) -> pd.DataFrame:
-    with path(data, file_name) as cm:
-        return pd.read_feather(cm)
+    source = files(data).joinpath(file_name)
+    with as_file(source) as file_path:
+        return pd.read_feather(file_path)
