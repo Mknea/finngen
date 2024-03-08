@@ -118,8 +118,10 @@ def test_birthday_born_in_current_year(mock_randint: Mock):
 @pytest.mark.parametrize(
     "age, gender, mock_individual_number, mock_birthday, expected_code",
     [
+        (0, Gender.Male, 523, date(2022, 6, 25), "250622A523H"),
         (70, Gender.Female, 308, date(1952, 10, 13), "131052-308T"),
         (16, Gender.Male, 5, date(2006, 2, 20), "200206A0057"),
+        (100, Gender.Female, 108, date(1921, 9, 4), "040921-108R"),
     ],
 )
 def test_personal_identity_code(
