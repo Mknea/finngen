@@ -40,6 +40,4 @@ def request_data_from_statsfinn(query_file_path: Path):
 def inspect_res(res):
     df = pd.read_csv(StringIO(res.text))
     print(df)
-    import pdb
-
-    pdb.set_trace()
+    breakpoint()  # noqa: T100

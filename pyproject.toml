@@ -28,11 +28,35 @@ pytest-cov = "^3.0.0"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.isort]
-profile = "black"
-
-[tool.black]
+[tool.ruff]
 line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "I",
+    "B",
+    "C",
+    "E",
+    "F",
+    "W",
+    "TID25",
+    "T100",
+    "RUF",
+    "TRY004",
+    "B904",
+    "TRY302",
+    "TRY400",
+    "DTZ",
+]
+
+ignore = [
+    "E402",
+    "E501", # For the ruff formatter, if it has failed to format the line, do not complain
+]
+exclude = [".git", "__pycache__", "venv", ".venv", ".tox"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 18
 
 [tool.tox]
 legacy_tox_ini = """

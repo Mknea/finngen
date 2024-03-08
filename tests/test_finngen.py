@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from unittest.mock import Mock, PropertyMock, patch
 
 import numpy as np
@@ -59,7 +59,7 @@ def test_people_creation():
 
 
 def test_people_generation():
-    people = [x for x in generate_finnish_people(amount=100)]
+    people = list(generate_finnish_people(amount=100))
     assert 100 == len(people)
     assert_valid_person_with_valid_fields(people[50])
 
@@ -84,7 +84,7 @@ def create_person(**kwargs):
     )
 
 
-@freeze_time(datetime(2022, 6, 25))
+@freeze_time(datetime(2022, 6, 25, tzinfo=timezone.utc))
 @patch("finngen.randint")
 @pytest.mark.parametrize("age, expected_birth_year", [(1, 2021), (16, 2006), (100, 1922)])
 def test_birthday_basic_case_generation(mock_randint: Mock, age: int, expected_birth_year: int):
@@ -92,23 +92,28 @@ def test_birthday_basic_case_generation(mock_randint: Mock, age: int, expected_b
     mock_randint.return_value = mocked_delta_randint
     person = create_person(age=age)
     assert (
-        datetime(year=expected_birth_year, month=1, day=mocked_delta_randint + 1).date()
+        datetime(
+            year=expected_birth_year, month=1, day=mocked_delta_randint + 1, tzinfo=timezone.utc
+        ).date()
         == person.birthday
     )
 
 
-@freeze_time(datetime(2000, 1, 10))
+@freeze_time(datetime(2000, 1, 10, tzinfo=timezone.utc))
 @patch("finngen.randint")
 def test_birthday_born_in_current_year(mock_randint: Mock):
     """Should generate date only up to current day"""
     mocked_delta_randint = 7
     mock_randint.return_value = mocked_delta_randint
     person = create_person(age=0)
-    assert datetime(year=2000, month=1, day=mocked_delta_randint + 1).date() == person.birthday
+    assert (
+        datetime(year=2000, month=1, day=mocked_delta_randint + 1, tzinfo=timezone.utc).date()
+        == person.birthday
+    )
     mock_randint.assert_called_once_with(0, 10 - 1)
 
 
-@freeze_time(datetime(2022, 6, 25))
+@freeze_time(datetime(2022, 6, 25, tzinfo=timezone.utc))
 @patch("finngen.randrange")
 @pytest.mark.parametrize(
     "age, gender, mock_individual_number, mock_birthday, expected_code",

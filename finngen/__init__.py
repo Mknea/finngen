@@ -7,7 +7,7 @@ Generate statistically (somewhat) accurate instances of finnish people!
 import calendar
 from collections import Counter
 from dataclasses import dataclass, field
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from enum import Enum
 from random import choices, randint, randrange, shuffle
 from typing import Iterator, List, Literal, Optional, Sequence, Tuple, Union, cast
@@ -61,9 +61,7 @@ class Person:
                 showm_fields[field_name[1:]] = getattr(self, field_name)
                 del showm_fields[field_name]
         return (
-            "Person("
-            + ", ".join(f"{key}={repr(value)}" for key, value in showm_fields.items())
-            + ")"
+            "Person(" + ", ".join(f"{key}={value!r}" for key, value in showm_fields.items()) + ")"
         )
 
     @property
@@ -79,7 +77,7 @@ class Person:
         only days up to (including) current date are allowed.
         """
         if self._birthday is None:
-            utc_now = datetime.utcnow()
+            utc_now = datetime.now(tz=timezone.utc)
             birth_year = (utc_now - timedelta(weeks=52 * int(self.age))).date().year
             days_in_that_year = (
                 365 + calendar.isleap(birth_year)
@@ -113,7 +111,7 @@ class Person:
             check_digit = (
                 str(check_modulo)
                 if check_modulo < 10
-                else {k: v for k, v in zip(range(10, 31), [*"ABCDEFHJKLMNPRSTVWXY"])}[check_modulo]
+                else dict(zip(range(10, 31), [*"ABCDEFHJKLMNPRSTUVWXY"]))[check_modulo]
             )
             self._personal_identity_code = (
                 birth_code + century_code + individual_number + check_digit
@@ -135,7 +133,6 @@ SOURCE_DATA = {
 
 
 def _generate(amount: int = 1) -> Iterator[Person]:
-
     # It's expensive to setup choices:
     # Generate fields per dataset as few times as possible and just pair them at the end
     residence_age_genders = _create_residence_age_gender(amount)

@@ -58,12 +58,12 @@ def test_gender_is_assigned_in_set_proportions(generated_finns: List[Person]):
 
 def test_names_are_assigned_in_set_proportions(generated_finns: List[Person]):
     count_of_specific_men_first_name = count_amount_with_field_value(
-        generated_finns, "first_name", PRESET_MENS_FIRST_NAMES["first_name"][0]  # type: ignore
+        generated_finns,
+        "first_name",
+        PRESET_MENS_FIRST_NAMES["first_name"][0],  # type: ignore
     )
     assert count_of_specific_men_first_name == pytest.approx(
-        len(generated_finns)
-        * PERCENTAGE_OF_MEN_IN_SOURCE
-        * PRESET_MENS_FIRST_NAMES["weight"][0],  # type: ignore
+        len(generated_finns) * PERCENTAGE_OF_MEN_IN_SOURCE * PRESET_MENS_FIRST_NAMES["weight"][0],  # type: ignore
         rel=1e-1,
     )
 
